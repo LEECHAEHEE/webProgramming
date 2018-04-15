@@ -1,0 +1,10 @@
+package com.board.controller;
+
+i
+
+public interface CommandAction{
+	
+}
+public class CommandAction {
+
+}

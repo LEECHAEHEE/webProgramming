@@ -1,0 +1,58 @@
+<%@page import = "java.util.regex.Pattern" %>
+<%@page import = "java.sql.DriverManager" %>
+<%@page import = "java.sql.Connection" %>
+<%@page import = "java.sql.Statement" %>
+<%@taglib prefix ="c"uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>게시판</title>
+<%
+request.setCharacterEncoding("euc-kr");
+	int idx = 1;
+	String title = request.getParameter("title");
+	String writer = request.getParameter("writer");
+	String content = request.getParameter("content");
+	int count = 1;
+	
+	if(title==null||title=="") 
+		out.println("title is null");
+	
+	if(writer==null||writer=="")
+		out.println("wirter is null");
+	else if(!Pattern.matches("^[_0-9a-zA-Z-]+@[0-9a-zA-Z-]+(.[_0-9a-zA-Z-]+)*$",writer))
+		out.println("not e-mail form");
+	
+	if(content==""||content==null)
+		out.println("content is null");
+	
+	try{
+		String driverName = "oracle.jdbc.driver.OracleDriver";
+		String url ="jdbc:oracle:thin:@localhost:1521:XE";
+		
+		Class.forName(driverName);
+		Connection con = DriverManager.getConnection(url,"board","7465");
+		out.println("success connecting to Oracle");
+		
+		Statement stmt = con.createStatement();
+		String sql = "insert into board " +
+					"(idx, title, writer, regdate, count, content )"+
+					"values(board_seq.nextval, '"+title+"', '"+writer+"', sysdate, "+count+", '"+content+"' )";
+		
+		stmt.executeUpdate(sql);
+		con.close();
+	}catch(Exception e){
+		out.println("Failed Connecting to Oracle");
+		out.println(e.getMessage());
+		e.printStackTrace();
+	}finally{
+		out.print("<script>location.href='list.jsp';</script>");
+	}
+%>
+</head>
+<body>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR" %>
+<%@ page import="java.sql.*" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Board</title>
+<%
+request.setCharacterEncoding("UTF-8");
+	int idx = 1;
+	String title = request.getParameter("title");
+	String writer = request.getParameter("writer");
+	String regdate = request.getParameter("regdate");
+	String content = request.getParameter("content");
+	int count = 100;
+	
+	if(title==null||title=="")
+		out.println("input title");
+	
+	if(writer==null||writer=="")
+		out.println("input writer");
+	
+	if(regdate==null||regdate=="")
+		out.println("input regdate");
+	
+	if(content==null||content=="")
+		out.println("input content");
+	
+	try{
+		String driverName = "oracle.jdbc.driver.OracleDriver";
+		String url = "jdbc:oracle:thin:@localhost:1521:XE";
+		
+		ResultSet rs = null;
+		Class.forName(driverName);
+		Connection conn = DriverManager.getConnection(url,"board","board");
+		out.println("Connection Successful");
+		
+		Statement stmt = conn.createStatement();
+		String sql = "select * from board order by idx desc";
+		rs = stmt.executeQuery(sql);
+		
+%>
+<style type="text/css">
+	table, td, th {border:1px solid red;}
+	th {background-color:green; color:black;}
+</style>
+</head>
+<body>
+<h1>Board List</h1>
+	<table>
+		<tr>					<!-- table row -->
+			<th>번호</th>		<!-- table header -->
+			<th>제목</th>
+			<th>작성자</th>
+			<th>날짜</th>
+			<th>조회수</th>
+			<th>내용</th>
+		</tr>
+		
+<% 
+	 while(rs.next()){
+			out.println("<tr>");
+			out.println("<td>" + rs.getString(1) + "</td>");
+			out.println("<td>" + rs.getString(2) + "</td>");
+			out.println("<td>" + rs.getString(3) + "</td>");
+			out.println("<td>" + rs.getString(4) + "</td>");
+			out.println("<td>" + rs.getString(5) + "</td>");
+			out.println("<td>" + rs.getString(6) + "</td>");
+			out.println("</tr>");
+		} 
+		
+%>
+	</table>
+
+	<a href="write.jsp">Write</a>
+<%
+	conn.close();
+		}catch(Exception e){
+			out.println("Connection Failed");
+			out.println(e.getMessage());
+			e.printStackTrace();
+	}
+%>
+</body>
+</html>

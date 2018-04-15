@@ -1,0 +1,5 @@
+package com.board.db.sqlconfig;
+
+public class IBatisDBConnector {
+
+}
