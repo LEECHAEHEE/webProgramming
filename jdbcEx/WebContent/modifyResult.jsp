@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+	수정 완료
+	<a href="logout.jsp">로그아웃</a>
 </body>
 </html>

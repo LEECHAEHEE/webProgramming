@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+	String name;
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,15 +10,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<%!
-		String name;
-	%>
-	
+
 	<%
 		name = (String)session.getAttribute("name");
-		out.println("HI! " + name);
 	%>
-	
-	<a href="modify.jsp">수정하기</a>
+	HI! <%=name %>!<br/>
+	<a href="modify.jsp">회원정보 수정</a>
 </body>
 </html>

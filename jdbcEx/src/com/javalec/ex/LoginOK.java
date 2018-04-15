@@ -14,33 +14,24 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class LoginOK
+ * Servlet implementation class LoginOk
  */
-@WebServlet("/LoginOK")
-public class LoginOK extends HttpServlet {
+@WebServlet("/LoginOk")
+public class LoginOk extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-	String uid = "scott", upw="tiger";
-	String id,pw,iid, ipw, name;
-	String sql;  
-	ResultSet rs;
-	Connection conn;
-	Statement stmt;
-	String driver = "oracle.jdbc.driver.OracleDriver";
-	String url = "jdbc:oracle:thin:@localhost:1521:xe";
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginOK() {
+    public LoginOk() {
         super();
         // TODO Auto-generated constructor stub
     }
 
-	/**
+    /**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doAction(request, response);
 	}
 
@@ -48,47 +39,60 @@ public class LoginOK extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doAction(request, response);
 	}
-	
-	protected void doAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		iid = request.getParameter("id");
-		ipw = request.getParameter("pw");
 
-		sql = "select name from member where id='" + iid +"' and pw='" + ipw + "'";
+	protected void doAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Connection conn = null;
+		Statement stmt= null;
+		ResultSet rs= null;
+		
+		String driver = "oracle.jdbc.driver.OracleDriver";
+		String url = "jdbc:oracle:thin:@localhost:1521:xe";
+		String u_id ="scott", u_pw="tiger";
+	
+		String id = request.getParameter("id");
+		String pw = request.getParameter("pw");
+		String name="";
+		/* 
+		 * select name from member where id = 'id' and pw ='pw'; 
+		 */
+		String sql = "select name from member where id = '" + id + "' and pw ='" + pw + "'";
 		System.out.println(sql);
-		request.setCharacterEncoding("EUC-KR");
+		
 		try {
 			Class.forName(driver);
-			conn = DriverManager.getConnection(url,uid,upw);
+			conn = DriverManager.getConnection(url, u_id, u_pw);
 			stmt = conn.createStatement();
-			rs  = stmt.executeQuery(sql);
-			if(rs==null) {
-				System.out.println("login error!");
-				response.sendRedirect("login.jsp");
-			}
-			while(rs.next()) {
-				name = rs.getString("name");
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()){
+				name = rs.getString("name"); 
 			}
 			
-			HttpSession hs = request.getSession();
-			hs.setAttribute("name", name);
-			hs.setAttribute("id", id);
-			hs.setAttribute("pw", pw);
+			if(name.equals("")) {
+				System.out.println("login failed");
+			}else {
+				System.out.println("LoginOK");
 				
-			response.sendRedirect("loginResult.jsp");
-		}catch(Exception e){
+				HttpSession hs = request.getSession();
+				hs.setAttribute("id", id);
+				hs.setAttribute("pw", pw);
+				hs.setAttribute("name", name);
+				
+				response.sendRedirect("loginResult.jsp");
+			}
+		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
 			try {
-				if(rs!=null) rs.close();
 				if(conn!=null) conn.close();
 				if(stmt!=null) stmt.close();
+				if(rs!=null) rs.close();
 			}catch(Exception e2) {
 				e2.printStackTrace();
 			}
 		}
+				
 	}
 }
