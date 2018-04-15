@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;stone/WebContent/board/boardModifyFOrm.jsp&apos; to &apos;boardModifyForm.jsp&apos;" description="Rename resource &apos;boardModifyFOrm.jsp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="WebContent/board/boardModifyFOrm.jsp" name="boardModifyForm.jsp" stamp="1521961868367" updateReferences="true"/>
-</session>
